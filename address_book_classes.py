@@ -97,6 +97,17 @@ class Record:
 
         return (next_birthday.date() - today).days
 
+    def show_contact(self):
+        print(self.name.value.capitalize())
+        for phone in self.phones:
+            print(f"\t{phone.value}")
+        # if self.email:
+        #     print(f"\t{self.email.value}")
+        # if self.adress:
+        #     print(f"\t{self.adress.value}")
+        if self.birthday:
+            print(f"\t{self.birthday.value}")
+
 
 class AddressBook(UserDict):
     def __init__(self):
@@ -133,6 +144,16 @@ class AddressBook(UserDict):
         if not record_result:
             raise ValueError("Contacts with this value does not exist.")
         return record_result
+
+    @classmethod
+    def show_birthday_contact_name(cls) -> None:
+        days_from_today = int(input(
+                "For what number of days from today do you want to know contacts with birthdays?\n")
+        )
+        for name, record in contacts_dict.items():
+            if record.birthday:
+                if record.get_days_to_next_birthday() <= days_from_today:
+                    record.show_contact()
 
     def iterator(self, count=5):
         page = []
