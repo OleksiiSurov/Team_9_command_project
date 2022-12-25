@@ -40,6 +40,7 @@ def add_func(data):
     return f'You added new contact: {name} with this {phones}.'
 
 
+
 @input_error
 def change_phone_func(data):
     """
@@ -116,6 +117,16 @@ def birthday_func(data):
     record.add_birthday(date)
 
     return f'For {name} you add Birthday {date}'
+
+
+@input_error
+def add_notes_func(data):
+    name, *note = data.strip().split(' ')
+    #print(name, note)
+    record = contacts_dict[name]
+    record.add_note(' '.join(note))
+    return f'For {name} you added Notes: {" ".join(note)}'
+
 
 
 @input_error
