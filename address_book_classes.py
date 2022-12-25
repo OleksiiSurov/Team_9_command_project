@@ -41,15 +41,25 @@ class Birthday(Field):
         self._value = value
 
 
+class Notes(Field):
+    @Field.value.setter
+    def value(self, value):
+        if len(value) > 30:
+            raise ValueError("Too long note")
+        self._value = value
+
+
 class Record:
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
+        self.notes = None
         self.birthday = None
 
     def get_info(self):
         phones_info = ''
         birthday_info = ''
+        notes_info = ''
 
         for phone in self.phones:
             phones_info += f'{phone.value}, '
@@ -57,7 +67,10 @@ class Record:
         if self.birthday:
             birthday_info = f' Birthday : {self.birthday.value}'
 
-        return f'{self.name.value} : {phones_info[:-2]}{birthday_info}'
+        if self.notes:
+            notes_info = f'Notes: {self.notes.value}'
+
+        return f'{self.name.value} : {phones_info[:-2]}{birthday_info}, {notes_info}'
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
@@ -76,6 +89,9 @@ class Record:
 
     def add_birthday(self, date):
         self.birthday = Birthday(date)
+
+    def add_note(self, note):
+        self.notes = Notes(note)
 
     def get_days_to_next_birthday(self):
         if not self.birthday:
