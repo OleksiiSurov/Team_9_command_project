@@ -138,6 +138,14 @@ def next_birthday_func(name):
     return f"Days to next birthday of this {name} will be in {record.get_days_to_next_birthday()}."
 
 
+@input_error
+def who_have_birthdays_func():
+    """
+    Показує у кого День народження в вказаному проміжку днів починаючи від сьогодні.
+    """
+    return contacts_dict.show_birthday_contact_name()
+
+
 def create_data(data):
     """
     Розділяє вхідні дані на дві частини - номер і телефон.
