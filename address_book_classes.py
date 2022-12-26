@@ -1,4 +1,5 @@
 import pickle
+import re
 from datetime import datetime
 from collections import UserDict
 
@@ -49,28 +50,44 @@ class Notes(Field):
         self._value = value
 
 
+class Email(Field):
+    @Field.value.setter
+    def value(self, value):
+        result = re.findall(r"[a-zA-Z]+[\w.]+@[a-zA-Z]{2,}.[a-zA-Z]{2,}", value)
+        if not result:
+            print('wrong Email address')
+            raise ValueError
+        else:
+            self._value = value
+
+
 class Record:
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
         self.notes = None
         self.birthday = None
+        self.email = None
 
     def get_info(self):
         phones_info = ''
         birthday_info = ''
         notes_info = ''
+        email_info = ''
 
         for phone in self.phones:
             phones_info += f'{phone.value}, '
 
         if self.birthday:
-            birthday_info = f' Birthday : {self.birthday.value}'
+            birthday_info = f'Birthday: {self.birthday.value}'
 
         if self.notes:
             notes_info = f'Notes: {self.notes.value}'
 
-        return f'{self.name.value} : {phones_info[:-2]}{birthday_info}, {notes_info}'
+        if self.email:
+            email_info = f'Email: {self.email.value}'
+
+        return f'{self.name.value}: {phones_info[:-2]}\t{birthday_info}\t{email_info}\t{notes_info}'
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
@@ -92,6 +109,9 @@ class Record:
 
     def add_note(self, note):
         self.notes = Notes(note)
+
+    def add_email(self, email):
+        self.email = Email(email)
 
     def get_days_to_next_birthday(self):
         if not self.birthday:
@@ -117,8 +137,8 @@ class Record:
         print(self.name.value.capitalize())
         for phone in self.phones:
             print(f"\t{phone.value}")
-        # if self.email:
-        #     print(f"\t{self.email.value}")
+        if self.email:
+            print(f"\t{self.email.value}")
         # if self.adress:
         #     print(f"\t{self.adress.value}")
         if self.birthday:
