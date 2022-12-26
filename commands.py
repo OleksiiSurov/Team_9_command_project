@@ -40,7 +40,6 @@ def add_func(data):
     return f'You added new contact: {name} with this {phones}.'
 
 
-
 @input_error
 def change_phone_func(data):
     """
@@ -122,11 +121,28 @@ def birthday_func(data):
 @input_error
 def add_notes_func(data):
     name, *note = data.strip().split(' ')
-    #print(name, note)
     record = contacts_dict[name]
     record.add_note(' '.join(note))
     return f'For {name} you added Notes: {" ".join(note)}'
 
+
+@input_error
+def add_email_func():
+    name, email = input('Enter name and Email: ').strip().split(' ')
+    try:
+        record = contacts_dict[name]
+        record.add_email(email)
+        return f'For {name} you added Email: {email}'
+    except ValueError:
+        return f'Email not added'
+
+
+@input_error
+def add_address_func(data):
+    name, *address = data.strip().split(' ')
+    record = contacts_dict[name]
+    record.add_address(' '.join(address))
+    return f'For {name} you added Address: {" ".join(address)}'
 
 
 @input_error
