@@ -92,7 +92,7 @@ class Record:
             birthday_info = f'\nBirthday: {self.birthday.value}'
 
         if self.notes:
-            notes_info = f'\nNotes: {self.notes.value}'
+            notes_info = f'\nNotes: {" ".join(self.notes.value)}'
 
         if self.email:
             email_info = f'\nEmail: {self.email.value}'
@@ -123,6 +123,18 @@ class Record:
 
     def add_note(self, note):
         self.notes = Notes(note)
+
+    def change_note(self, additional_info):
+        if self.notes:
+            self.notes.value.append(additional_info)
+        else:
+            raise ValueError('This contact doesnt have any notes! To add new note please type "notes <name> <notes>"')
+
+    def delete_notes(self, name):
+        if self.notes:
+            self.notes = None
+        else:
+            raise ValueError(f'{name} doesnt have any notes, to add note to contact please type "notes <name> <notes>"')
 
     def add_email(self, email):
         self.email = Email(email)

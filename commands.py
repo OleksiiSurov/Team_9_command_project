@@ -122,8 +122,24 @@ def birthday_func(data):
 def add_notes_func(data):
     name, *note = data.strip().split(' ')
     record = contacts_dict[name]
-    record.add_note(' '.join(note))
+    record.add_note(note)
     return f'For {name} you added Notes: {" ".join(note)}'
+
+
+@input_error
+def change_notes_func(data):
+    name, *additional_info = data.strip().split(' ')
+    record = contacts_dict[name]
+    record.change_note(additional_info)
+    return f'For {name} you changed note and added: {" ".join(additional_info)}'
+
+
+@input_error
+def delete_notes_func(name):
+    name = name.strip()
+    record = contacts_dict[name]
+    record.delete_notes(name)
+    return f'For {name} you deleted notes!'
 
 
 @input_error
