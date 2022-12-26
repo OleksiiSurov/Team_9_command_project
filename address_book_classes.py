@@ -61,6 +61,14 @@ class Email(Field):
             self._value = value
 
 
+class Address(Field):
+    @Field.value.setter
+    def value(self, value):
+        if len(value) > 80:
+            raise ValueError("Too long note")
+        self._value = value
+
+
 class Record:
     def __init__(self, name):
         self.name = Name(name)
@@ -68,26 +76,32 @@ class Record:
         self.notes = None
         self.birthday = None
         self.email = None
+        self.address = None
 
     def get_info(self):
         phones_info = ''
         birthday_info = ''
         notes_info = ''
         email_info = ''
+        address_info = ''
 
         for phone in self.phones:
             phones_info += f'{phone.value}, '
 
         if self.birthday:
-            birthday_info = f'Birthday: {self.birthday.value}'
+            birthday_info = f'\nBirthday: {self.birthday.value}'
 
         if self.notes:
-            notes_info = f'Notes: {self.notes.value}'
+            notes_info = f'\nNotes: {self.notes.value}'
 
         if self.email:
-            email_info = f'Email: {self.email.value}'
+            email_info = f'\nEmail: {self.email.value}'
 
-        return f'{self.name.value}: {phones_info[:-2]}\t{birthday_info}\t{email_info}\t{notes_info}'
+        if self.address:
+            address_info = f'\nAddress: {self.address.value}'
+
+        return f"{30*'-'}\n{self.name.value}: {phones_info[:-2]}{birthday_info}" \
+               f"{email_info}{notes_info}{address_info}\n{30*'-'}"
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
@@ -112,6 +126,9 @@ class Record:
 
     def add_email(self, email):
         self.email = Email(email)
+
+    def add_address(self, address):
+        self.address = Address(address)
 
     def get_days_to_next_birthday(self):
         if not self.birthday:
@@ -139,8 +156,8 @@ class Record:
             print(f"\t{phone.value}")
         if self.email:
             print(f"\t{self.email.value}")
-        # if self.adress:
-        #     print(f"\t{self.adress.value}")
+        if self.address:
+            print(f"\t{self.address.value}")
         if self.birthday:
             print(f"\t{self.birthday.value}")
 

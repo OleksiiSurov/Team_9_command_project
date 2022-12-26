@@ -138,6 +138,14 @@ def add_email_func():
 
 
 @input_error
+def add_address_func(data):
+    name, *address = data.strip().split(' ')
+    record = contacts_dict[name]
+    record.add_address(' '.join(address))
+    return f'For {name} you added Address: {" ".join(address)}'
+
+
+@input_error
 def next_birthday_func(name):
     name = name.strip()
 
