@@ -3,6 +3,7 @@ from commands import (hello_func, exit_func, add_func, change_phone_func, show_f
                       add_email_func, add_address_func)
 
 COMMANDS_DICT = {
+    'address': add_address_func,
     'hello': hello_func,
     'exit': exit_func,
     'close': exit_func,
@@ -18,5 +19,4 @@ COMMANDS_DICT = {
     'notes': add_notes_func,
     'who have birthdays': who_have_birthdays_func,
     'email': add_email_func,
-    '_address': add_address_func
 }
