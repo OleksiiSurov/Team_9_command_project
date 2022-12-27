@@ -1,6 +1,6 @@
 from commands import (hello_func, exit_func, add_func, change_phone_func, show_func, search_func, del_phone_func,
                       del_func, birthday_func, next_birthday_func, add_notes_func, who_have_birthdays_func,
-                      add_email_func, add_address_func)
+                      add_email_func, add_address_func, change_notes_func, delete_notes_func, search_notes_func)
 
 COMMANDS_DICT = {
     'address': add_address_func,
@@ -17,6 +17,9 @@ COMMANDS_DICT = {
     'birthday': birthday_func,
     'days to birthday': next_birthday_func,
     'notes': add_notes_func,
+    'change notes': change_notes_func,
+    'remove notes': delete_notes_func,
+    'search': search_notes_func,
     'who have birthdays': who_have_birthdays_func,
     'email': add_email_func,
 }

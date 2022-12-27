@@ -68,6 +68,21 @@ def search_func(value):
         search_records += f"{record.get_info()}\n"
     return search_records
 
+@input_error
+def search_notes_func(value):
+    """
+    Коли користувач шукає конкретний контакт за значенням.
+    :param value: Контакт котрий шукаємо.
+    :return: Повертає дані контакту.
+    """
+    search_records = ''
+    records = contacts_dict.search_note(value.strip())
+
+    for record in records:
+        #print(record)
+        search_records += f"{record.get_info()}\n"
+    return search_records
+
 
 @input_error
 def show_func():
@@ -122,8 +137,24 @@ def birthday_func(data):
 def add_notes_func(data):
     name, *note = data.strip().split(' ')
     record = contacts_dict[name]
-    record.add_note(' '.join(note))
+    record.add_note(note)
     return f'For {name} you added Notes: {" ".join(note)}'
+
+
+@input_error
+def change_notes_func(data):
+    name, *additional_info = data.strip().split(' ')
+    record = contacts_dict[name]
+    record.change_note(additional_info)
+    return f'For {name} you changed note and added: {" ".join(additional_info)}'
+
+
+@input_error
+def delete_notes_func(name):
+    name = name.strip()
+    record = contacts_dict[name]
+    record.delete_notes(name)
+    return f'For {name} you deleted notes!'
 
 
 @input_error
