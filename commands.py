@@ -2,6 +2,7 @@ from address_book_classes import contacts_dict, Record
 from decorator import input_error
 import instructions
 
+
 @input_error
 def hello_func():
     """
@@ -14,25 +15,25 @@ def hello_func():
 @input_error
 def help_func():
     list_instructions = ['<name> <address info>',
-             '"greeting with bot"',
-             '"quit work with bot"',
-             '"quit work with bot"',
-             '"quit work with bot"',
-             '<name> <phone number>',
-             '<name> <phone number>',
-             '"shows list of all contact in address book"',
-             '<name>',
-             '<name> <phone number>',
-             '<name>',
-             '<name> <date in format 1999-01-01>',
-             '<name>',
-             '<name> <note (any text info related to contact)>',
-             '<name>',
-             '<name>',
-             '<any word or text>',
-             '<days>',
-             '<name> <email>'
-             ]
+                         '"greeting with bot"',
+                         '"quit work with bot"',
+                         '"quit work with bot"',
+                         '"quit work with bot"',
+                         '<name> <phone number>',
+                         '<name> <phone number>',
+                         '"shows list of all contact in address book"',
+                         '<name>',
+                         '<name> <phone number>',
+                         '<name>',
+                         '<name> <date in format 1999-01-01>',
+                         '<name>',
+                         '<name> <note (any text info related to contact)>',
+                         '<name>',
+                         '<name>',
+                         '<any word or text>',
+                         '<days>',
+                         '<name> <email>'
+                         ]
     count = 0
     print('{:^75}'.format('Instructions how to work with bot'))
     print(80 * '-')
