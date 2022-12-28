@@ -1,7 +1,7 @@
-from commands import (hello_func, exit_func, add_func, change_phone_func, show_func, search_func, del_phone_func,
-                      del_func, birthday_func, next_birthday_func, add_notes_func, who_have_birthdays_func,
-                      add_email_func, add_address_func, change_notes_func, delete_notes_func, search_notes_func,\
-                      help_func)
+from smartBot.commands import (hello_func, exit_func, add_func, change_phone_func, show_func, search_func, del_phone_func,
+                               del_func, birthday_func, next_birthday_func, add_notes_func, who_have_birthdays_func,
+                               add_email_func, add_address_func, change_notes_func, delete_notes_func, search_notes_func, \
+                               help_func)
 
 COMMANDS_DICT = {
     'address': add_address_func,

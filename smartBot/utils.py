@@ -1,4 +1,4 @@
-from instructions import COMMANDS_DICT
+from smartBot.instructions import COMMANDS_DICT
 
 
 def change_input(user_input):
