@@ -1,6 +1,6 @@
 from smartBot.address_book_classes import contacts_dict, Record
-from decorator import input_error
-import instructions
+from smartBot.decorator import input_error
+import smartBot.instructions
 
 
 @input_error
@@ -39,7 +39,7 @@ def help_func():
     print(80 * '-')
     print('|{:<4}| {:<20}| {:<50}|'.format('#', 'commands', 'how to use'))
     print(80 * '-')
-    for key, i in zip(instructions.COMMANDS_DICT, list_instructions):
+    for key, i in zip(smartBot.instructions.COMMANDS_DICT, list_instructions):
         count += 1
         print('|{:<4}| {:<20}| {:<50}|'.format(f'{count}.', key, i))
     print(80 * '-')
