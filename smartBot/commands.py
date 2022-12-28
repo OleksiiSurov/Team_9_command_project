@@ -1,4 +1,4 @@
-from address_book_classes import contacts_dict, Record
+from smartBot.address_book_classes import contacts_dict, Record
 from decorator import input_error
 import instructions
 
