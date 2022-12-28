@@ -126,7 +126,7 @@ class Record:
 
     def change_note(self, additional_info):
         if self.notes:
-            self.notes.value.append(additional_info)
+            self.notes.value += additional_info
         else:
             raise ValueError('This contact doesnt have any notes! To add new note please type "notes <name> <notes>"')
 
@@ -216,7 +216,7 @@ class AddressBook(UserDict):
             if not record.notes:
                 continue
             for i in record.notes.value:
-                if value in i:
+                if value.lower() in i.lower():
                     record_result.append(record)
 
         if not record_result:
