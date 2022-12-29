@@ -1,4 +1,5 @@
 import pickle
+import re
 from datetime import datetime
 from collections import UserDict
 
@@ -25,7 +26,7 @@ class Phone(Field):
     @Field.value.setter
     def value(self, value):
         if len(value) < 10 or len(value) > 12:
-            raise ValueError("Phone must contains 10 symbols.")
+            raise ValueError("Phone must contains 10 symbols!")
         if not value.isnumeric():
             raise ValueError('Wrong phones.')
         self._value = value
@@ -41,23 +42,66 @@ class Birthday(Field):
         self._value = value
 
 
+class Notes(Field):
+    @Field.value.setter
+    def value(self, value):
+        if len(value) > 30:
+            raise ValueError("Too long note")
+        self._value = value
+
+
+class Email(Field):
+    @Field.value.setter
+    def value(self, value):
+        result = re.findall(r"[a-zA-Z]+[\w.]+@[a-zA-Z]{2,}.[a-zA-Z]{2,}", value)
+        if not result:
+            print('wrong Email address')
+            raise ValueError
+        else:
+            self._value = value
+
+
+class Address(Field):
+    @Field.value.setter
+    def value(self, value):
+        if len(value) > 80:
+            raise ValueError("Too long note")
+        self._value = value
+
+
 class Record:
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
+        self.notes = None
         self.birthday = None
+        self.email = None
+        self.address = None
 
     def get_info(self):
         phones_info = ''
         birthday_info = ''
+        notes_info = ''
+        email_info = ''
+        address_info = ''
 
         for phone in self.phones:
             phones_info += f'{phone.value}, '
 
         if self.birthday:
-            birthday_info = f' Birthday : {self.birthday.value}'
+            birthday_info = f'\nBirthday: {self.birthday.value}'
 
-        return f'{self.name.value} : {phones_info[:-2]}{birthday_info}'
+        if self.notes:
+            notes_info = f'\nNotes: {" ".join(self.notes.value)}'
+
+        if self.email:
+            email_info = f'\nEmail: {self.email.value}'
+
+        if self.address:
+            address_info = f'\nAddress: {self.address.value}'
+
+        return f"{30*'-'}\n{self.name.value}: {phones_info[:-2]}{birthday_info}" \
+               f"{email_info}{notes_info}{address_info}\n{30*'-'}"
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
@@ -76,6 +120,27 @@ class Record:
 
     def add_birthday(self, date):
         self.birthday = Birthday(date)
+
+    def add_note(self, note):
+        self.notes = Notes(note)
+
+    def change_note(self, additional_info):
+        if self.notes:
+            self.notes.value += additional_info
+        else:
+            raise ValueError('This contact doesnt have any notes! To add new note please type "notes <name> <notes>"')
+
+    def delete_notes(self, name):
+        if self.notes:
+            self.notes = None
+        else:
+            raise ValueError(f'{name} doesnt have any notes, to add note to contact please type "notes <name> <notes>"')
+
+    def add_email(self, email):
+        self.email = Email(email)
+
+    def add_address(self, address):
+        self.address = Address(address)
 
     def get_days_to_next_birthday(self):
         if not self.birthday:
@@ -96,6 +161,17 @@ class Record:
         )
 
         return (next_birthday.date() - today).days
+
+    def show_contact(self):
+        print(self.name.value.capitalize())
+        for phone in self.phones:
+            print(f"\t{phone.value}")
+        if self.email:
+            print(f"\t{self.email.value}")
+        if self.address:
+            print(f"\t{self.address.value}")
+        if self.birthday:
+            print(f"\t{self.birthday.value}")
 
 
 class AddressBook(UserDict):
@@ -134,6 +210,29 @@ class AddressBook(UserDict):
             raise ValueError("Contacts with this value does not exist.")
         return record_result
 
+    def search_note(self, value):
+        record_result = []
+        for record in self.get_all_record().values():
+            if not record.notes:
+                continue
+            for i in record.notes.value:
+                if value.lower() in i.lower():
+                    record_result.append(record)
+
+        if not record_result:
+            raise ValueError("Contacts with this value does not exist.")
+        return record_result
+
+    @classmethod
+    def show_birthday_contact_name(cls) -> None:
+        days_from_today = int(input(
+                "For what number of days from today do you want to know contacts with birthdays?\n")
+        )
+        for name, record in contacts_dict.items():
+            if record.birthday:
+                if record.get_days_to_next_birthday() <= days_from_today:
+                    record.show_contact()
+
     def iterator(self, count=5):
         page = []
         i = 0
@@ -151,12 +250,12 @@ class AddressBook(UserDict):
             yield page
 
     def save_contacts_to_file(self):
-        with open('address_book.pickle', 'wb') as file:
+        with open('../address_book.pickle', 'wb') as file:
             pickle.dump(self.data, file)
 
     def load_contacts_from_file(self):
         try:
-            with open('address_book.pickle', 'rb') as file:
+            with open('../address_book.pickle', 'rb') as file:
                 self.data = pickle.load(file)
         except FileNotFoundError:
             pass

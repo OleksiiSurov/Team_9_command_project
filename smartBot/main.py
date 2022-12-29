@@ -1,5 +1,5 @@
-from utils import change_input
-from address_book_classes import contacts_dict
+from smartBot.utils import change_input
+from smartBot.address_book_classes import contacts_dict
 
 
 def main():

@@ -1,5 +1,6 @@
-from address_book_classes import contacts_dict, Record
-from decorator import input_error
+from smartBot.address_book_classes import contacts_dict, Record
+from smartBot.decorator import input_error
+import smartBot.instructions
 
 
 @input_error
@@ -8,6 +9,41 @@ def hello_func():
     При отриманні команди привіт- маємо зреагувати правильно.
     :return:
     """
+    return 'How can I help you?'
+
+
+@input_error
+def help_func():
+    list_instructions = ['<name> <address info>',
+                         '"greeting with bot"',
+                         '"quit work with bot"',
+                         '"quit work with bot"',
+                         '"quit work with bot"',
+                         '<name> <phone number>',
+                         '<name> <phone number>',
+                         '"shows list of all contact in address book"',
+                         '<name>',
+                         '<name> <phone number>',
+                         '<name>',
+                         '<name> <date in format 1999-01-01>',
+                         '<name>',
+                         '<name> <note (any text info related to contact)>',
+                         '<name>',
+                         '<name>',
+                         '<any word or text>',
+                         '<days>',
+                         '<name> <email>'
+                         ]
+    count = 0
+    print('{:^75}'.format('Instructions how to work with bot'))
+    print(80 * '-')
+    print('|{:<4}| {:<20}| {:<50}|'.format('#', 'commands', 'how to use'))
+    print(80 * '-')
+    for key, i in zip(smartBot.instructions.COMMANDS_DICT, list_instructions):
+        count += 1
+        print('|{:<4}| {:<20}| {:<50}|'.format(f'{count}.', key, i))
+    print(80 * '-')
+
     return 'How can I help you?'
 
 
@@ -70,6 +106,21 @@ def search_func(value):
 
 
 @input_error
+def search_notes_func(value):
+    """
+    Коли користувач шукає конкретний нотаток за значенням.
+    :param value: Нотаток котрий шукаємо.
+    :return: Повертає дані контакту.
+    """
+    search_records = ''
+    records = contacts_dict.search_note(value.strip())
+
+    for record in records:
+        search_records += f"{record.get_info()}\n"
+    return search_records
+
+
+@input_error
 def show_func():
     """
     Показуємо всю книгу контактів створену раніше.
@@ -119,12 +170,63 @@ def birthday_func(data):
 
 
 @input_error
+def add_notes_func(data):
+    name, *note = data.strip().split(' ')
+    record = contacts_dict[name]
+    record.add_note(note)
+    return f'For {name} you added Notes: {" ".join(note)}'
+
+
+@input_error
+def change_notes_func(data):
+    name, *additional_info = data.strip().split(' ')
+    record = contacts_dict[name]
+    record.change_note(additional_info)
+    return f'For {name} you changed note and added: {" ".join(additional_info)}'
+
+
+@input_error
+def delete_notes_func(name):
+    name = name.strip()
+    record = contacts_dict[name]
+    record.delete_notes(name)
+    return f'For {name} you deleted notes!'
+
+
+@input_error
+def add_email_func():
+    name, email = input('Enter name and Email: ').strip().split(' ')
+    try:
+        record = contacts_dict[name]
+        record.add_email(email)
+        return f'For {name} you added Email: {email}'
+    except ValueError:
+        return f'Email not added'
+
+
+@input_error
+def add_address_func(data):
+    name, *address = data.strip().split(' ')
+    record = contacts_dict[name]
+    record.add_address(' '.join(address))
+    return f'For {name} you added Address: {" ".join(address)}'
+
+
+@input_error
 def next_birthday_func(name):
     name = name.strip()
 
     record = contacts_dict[name]
 
     return f"Days to next birthday of this {name} will be in {record.get_days_to_next_birthday()}."
+
+
+@input_error
+def who_have_birthdays_func():
+    """
+    Показує у кого День народження в вказаному проміжку днів починаючи від сьогодні.
+    """
+    return contacts_dict.show_birthday_contact_name()
 
 
 def create_data(data):
